@@ -61,7 +61,7 @@ struct MakeRecordImpl
     }
 };
 
-static constexpr std::size_t DesireRecordSize = 128;
+static constexpr std::size_t DesireRecordSize = 256;
 using Record = FixedSizeRecord<DesireRecordSize>;
 using MakeRecord = MakeRecordImpl<Record>;
 
