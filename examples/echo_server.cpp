@@ -37,6 +37,7 @@ task<> session(std::unique_ptr<net::Connection> conn) {
     swap(*conn->write_buf(), *conn->read_buf());
     co_await conn->send();
     logger.debug("close connection: {}", client_addr.to_string());
+    co_return;
 }
 
 int main(int argc, char* argv[]) {
