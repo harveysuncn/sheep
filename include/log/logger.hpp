@@ -24,7 +24,7 @@ class LoggerImpl
     static constexpr std::size_t Desired_buffer_size = Record::Size * 8192;
     static constexpr std::size_t Desired_flush_threshold = Desired_buffer_size * 0.8;
     using Buffer = fmt::basic_memory_buffer<char, Desired_buffer_size>;
-    static constexpr std::int64_t Desired_sleep_microsec = 100;
+    static constexpr std::int64_t Desired_sleep_microsec = 10;
 
 public:
 
@@ -91,8 +91,9 @@ public:
     template<typename...Args>
     void log(LogLevel level, Args&&... args) {
         static auto emplace_functor = MakeRecord();
-        if (!checkLogLevel(level)) 
+        if (!checkLogLevel(level)) {
             return;
+        }
 
         logToGlobalQueue(emplace_functor, std::forward<Args>(args)...);
     }
@@ -139,7 +140,7 @@ public:
                         std::this_thread::sleep_for(std::chrono::nanoseconds(interval));
                     else
                         std::this_thread::yield();
-                    poll(false);
+                    poll(true);
                 }
             }
         );

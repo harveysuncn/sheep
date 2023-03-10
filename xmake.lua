@@ -38,6 +38,13 @@ target("test_connection")
     add_includedirs("include")
     add_files("test/test_connection.cpp")
     add_deps("sheep")
+
+
+target("echo_server")
+    set_kind("binary")
+    add_includedirs("include")
+    add_files("examples/echo_server.cpp")
+    add_deps("sheep")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
