@@ -20,8 +20,27 @@ public:
 
     Buffer(const Buffer&) = delete;
     Buffer& operator=(const Buffer&) = delete;
+
+    Buffer(Buffer&& other) noexcept 
+        : buf_(other.buf_), size_(other.size_), capacity_(other.capacity_)
+    {
+        other.buf_ = nullptr;
+        other.size_ = 0;
+        other.capacity_ = 0;
+    }
+
+    Buffer& operator=(Buffer&& other) noexcept
+    {
+        if (this == &other) return *this;
+        std::swap(buf_, other.buf_);
+        std::swap(size_, other.size_);
+        std::swap(capacity_, other.capacity_);
+        return *this;
+    }
+
+    friend void swap(Buffer&, Buffer&) noexcept;
     ~Buffer() {
-        std::free(buf_);
+        std::free(buf_); // its safe to free nullptr
     }
 
     std::size_t size() const noexcept { return size_; }
@@ -47,5 +66,11 @@ private:
     std::size_t capacity_;
 };
 
+inline void swap(Buffer& a, Buffer& b) noexcept {
+    using std::swap;
+    swap(a.buf_, b.buf_);
+    swap(a.size_, b.size_);
+    swap(a.capacity_, b.capacity_);
+}
 
 }
